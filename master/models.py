@@ -15,6 +15,9 @@ class Warehouse(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_wh')
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_wh')
 
+    def __str__(self):
+        return self.warehouse_name
+
 class Category(models.Model):
     PART = 'Part'
     SERVICE = 'Service'
