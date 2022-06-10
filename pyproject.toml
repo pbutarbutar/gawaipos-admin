@@ -10,6 +10,9 @@ Django = "^4.0.4"
 django-environment = "^0.3.8"
 django-environ = "^0.8.1"
 mysqlclient = "^2.1.0"
+django-import-export = "^2.8.0"
+django-money = "^2.1.1"
+Pillow = "^9.1.1"
 
 [tool.poetry.dev-dependencies]
 

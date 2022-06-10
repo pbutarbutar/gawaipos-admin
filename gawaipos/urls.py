@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from microweb.views import *
+from django.conf.urls.static import static
 
 admin.site.site_header = 'Gawaipos Admin'
 admin.site.site_title = 'Gawaipos Admin'
 admin.site.index_title = 'Gawaipos Administration'
 
 urlpatterns = [
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
 ]

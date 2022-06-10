@@ -86,3 +86,28 @@ class Catalog(models.Model):
     def __str__(self):
         return self.item_name
 
+
+class Supplier(models.Model):
+
+    supplier_code = models.CharField(max_length=50, unique=True)
+    supplier_name = models.CharField(max_length=150)
+    address = models.CharField(max_length=250)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.supplier_name
+
+class Customer(models.Model):
+
+    customer_code = models.CharField(max_length=50, unique=True)
+    customer_name = models.CharField(max_length=150)
+    address = models.CharField(max_length=250)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.customer_name
+
