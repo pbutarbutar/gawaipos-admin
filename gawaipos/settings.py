@@ -38,12 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'import_export',
-    'microweb',
+    'django_summernote',
     'djmoney',
     'master',
+    'vehicles',
     'inventory',
     'sales',
+    'purchase',
     'locations',
+    'microweb',
+    'merchants',
+    'setting_uom',
 ]
 
 MIDDLEWARE = [

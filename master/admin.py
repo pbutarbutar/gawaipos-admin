@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportMixin
-from master.models import Warehouse, Catalog, Category, Uom, Supplier, Customer
+from master.models import Warehouse, Catalog, Category,  Supplier, Customer
 
 
 class WarehouseAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -9,9 +9,6 @@ class WarehouseAdmin(ImportExportMixin, admin.ModelAdmin):
 
 class CategoryAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display= ('catogory_tipe', 'category_name', 'description', 'is_active')
-
-class UomAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display= ('uom_name', 'description', 'is_active')
 
 class Catalogdmin(ImportExportMixin, admin.ModelAdmin):
     list_display= ('item_code', 'barcode', 'item_name', 'description', 
@@ -28,7 +25,6 @@ class Customerdmin(ImportExportMixin, admin.ModelAdmin):
 
 admin.site.register(Warehouse, WarehouseAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Uom, UomAdmin)
 admin.site.register(Catalog, Catalogdmin)
 admin.site.register(Supplier, Supplierdmin)
 admin.site.register(Customer, Customerdmin)

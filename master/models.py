@@ -2,6 +2,7 @@ from tabnanny import verbose
 from turtle import title
 from django.db import models
 from django.contrib.auth.models import User
+from setting_uom.models import Uom
 
 # Create your models here.
 
@@ -50,20 +51,6 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-
-class Uom(models.Model):
-
-    uom_name = models.CharField(max_length=250, unique=True)
-    description = models.CharField(max_length=250)
-    is_active = models.BooleanField(default=True)    
-    created_at = models.DateTimeField(auto_now=False)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_oum')
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_oum')
-
-    def __str__(self):
-        return self.uom_name
-
 class Catalog(models.Model):
 
     item_code = models.CharField(max_length=50, unique=True)
@@ -71,7 +58,7 @@ class Catalog(models.Model):
     item_name = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    uom = models.ForeignKey(Uom, on_delete=models.CASCADE)
+    uom = models.ForeignKey(Uom, on_delete=models.CASCADE, related_name='uom_catalog_id')
     sell_price = models.IntegerField() 
     sell_disc = models.IntegerField()
     purchase_price = models.IntegerField() 
@@ -100,7 +87,15 @@ class Supplier(models.Model):
         return self.supplier_name
 
 class Customer(models.Model):
+    CASH = 'Cash'
+    CREDIT = 'Credit'
 
+    CUSTTYPE = (
+        (CASH, 'Cash'),
+        (CREDIT, 'Credit'),
+    )
+
+    customer_tipe = models.CharField(max_length=50, choices=CUSTTYPE, default=CASH)
     customer_code = models.CharField(max_length=50, unique=True)
     customer_name = models.CharField(max_length=150)
     address = models.CharField(max_length=250)
