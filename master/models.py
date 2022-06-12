@@ -2,7 +2,9 @@ from tabnanny import verbose
 from turtle import title
 from django.db import models
 from django.contrib.auth.models import User
-from setting_uom.models import Uom
+from setting_uom.models import Uom, GroupUom
+from merchants.models import Merchant
+
 
 # Create your models here.
 
@@ -10,6 +12,7 @@ class Warehouse(models.Model):
 
     warehouse_name = models.CharField(max_length=50, unique=True)
     warehouse_address = models.CharField(max_length=50)
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
     is_active = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
@@ -53,11 +56,13 @@ class Category(models.Model):
 
 class Catalog(models.Model):
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
     item_code = models.CharField(max_length=50, unique=True)
     barcode = models.CharField(max_length=50)
     item_name = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    uom_group_id = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
     uom = models.ForeignKey(Uom, on_delete=models.CASCADE, related_name='uom_catalog_id')
     sell_price = models.IntegerField() 
     sell_disc = models.IntegerField()
@@ -76,6 +81,7 @@ class Catalog(models.Model):
 
 class Supplier(models.Model):
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='supplier_merchant_id')
     supplier_code = models.CharField(max_length=50, unique=True)
     supplier_name = models.CharField(max_length=150)
     address = models.CharField(max_length=250)
@@ -95,6 +101,7 @@ class Customer(models.Model):
         (CREDIT, 'Credit'),
     )
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='customer_merchant_id')
     customer_tipe = models.CharField(max_length=50, choices=CUSTTYPE, default=CASH)
     customer_code = models.CharField(max_length=50, unique=True)
     customer_name = models.CharField(max_length=150)

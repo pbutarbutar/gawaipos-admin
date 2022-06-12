@@ -2,6 +2,7 @@ from lib2to3.pgen2.token import PERCENT
 from django.db import models
 from django.contrib.auth.models import User
 from master.models import Customer, Catalog, Warehouse
+from merchants.models import Merchant
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class Sales(models.Model):
     )
 
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_merchant_id')
     trx_num = models.CharField(max_length=50, unique=True)
     trx_date = models.DateField()
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_customerid')
@@ -40,6 +42,7 @@ class Sales(models.Model):
 
 class SalesDetails(models.Model):
     
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_item_merchant_id')
     sales_id = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_id')
     item_id = models.ForeignKey(Catalog, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_catalog_id')
     warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_warehouse_id')

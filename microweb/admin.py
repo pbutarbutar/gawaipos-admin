@@ -1,3 +1,4 @@
+from tkinter import Menu
 from django.contrib import admin
 from .models import Profile, AboutUs, ProductList, ProductListImages
 from django_summernote.admin import SummernoteModelAdmin

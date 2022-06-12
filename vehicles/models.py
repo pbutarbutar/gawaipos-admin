@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from merchants.models import Merchant
 
 class VehicleCategory(models.Model):
-
+    
     name_category = models.CharField(max_length=50)
     description = models.CharField(max_length=100, default="")
     is_active = models.BooleanField(default=True)    
@@ -44,6 +45,7 @@ class VehicleBrandOfType(models.Model):
 
 class Vehicle(models.Model):
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='vehicle_merchant_id')
     vehicle_number = models.CharField(max_length=50, unique=True)
     vehicle_date = models.DateField()
     vehicle_category_id = models.ForeignKey(VehicleCategory, on_delete=models.CASCADE,  null=True, related_name='vehicle_category_id_fk')
@@ -60,6 +62,7 @@ class Vehicle(models.Model):
 
 class VehicleOwner(models.Model):
 
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='vehicle_owner_merchant_id')
     vehicle_id = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='vehicle_id_owner_fk')
     owner_name = models.CharField(max_length=50)
     owner_hp = models.CharField(max_length=50)
