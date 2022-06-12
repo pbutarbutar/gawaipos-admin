@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     
     slug = models.CharField(max_length=100)
+    keywords = models.CharField(max_length=150, default="")
     title = models.CharField(max_length=100)
     name_business = models.CharField(max_length=50)
     address_business = models.CharField(max_length=150)
@@ -28,6 +29,7 @@ class Profile(models.Model):
 class AboutUs(models.Model):
     
     slug = models.SlugField(max_length=100)
+    keywords = models.CharField(max_length=150, default="")
     title = models.CharField(max_length=100)
     body = models.TextField()
     description = models.CharField(max_length=250)
@@ -44,3 +46,43 @@ class AboutUs(models.Model):
         db_table = "microweb_about_us"
 
 
+class ProductList(models.Model):
+    
+    slug = models.CharField(max_length=100)
+    product_keywords = models.CharField(max_length=150, default="")
+    product_title = models.CharField(max_length=100)
+    product_description= models.CharField(max_length=250)
+    product_view_body= models.TextField()
+    wa_number = models.CharField(max_length=15)
+    thumb_product = models.ImageField(upload_to='thumb_product')
+    is_draft = models.BooleanField(default=True)    
+    created_at = models.DateTimeField(auto_now=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_mcrw_products')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_mcrw_products')
+    
+    def __str__(self):
+        return self.product_title
+
+    class Meta:
+        db_table = "microweb_product_list"
+
+class ProductListImages(models.Model):
+    
+    slug = models.CharField(max_length=100)
+    product_images_keywords = models.CharField(max_length=150, default="")
+    product_images_title = models.CharField(max_length=100, default="")
+    product_images_body= models.TextField()
+    product_list_id = models.ForeignKey(ProductList, on_delete=models.CASCADE, related_name='product_list_images_id')
+    product_images = models.ImageField(upload_to='product_images')
+    is_draft = models.BooleanField(default=True)    
+    created_at = models.DateTimeField(auto_now=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_mcrw_images')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_mcrw_images')
+    
+    def __str__(self):
+        return self.product_images_title
+
+    class Meta:
+        db_table = "microweb_product_list_images"

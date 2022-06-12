@@ -17,7 +17,7 @@ class GroupUom(models.Model):
 
 class Uom(models.Model):
 
-    uom_code = models.CharField(max_length=10, unique=True, blank=False, default='-')
+    uom_code = models.CharField(max_length=10, unique=True, blank=False, default='')
     uom_name = models.CharField(max_length=20, default="")
     uom_length = models.CharField(max_length=20, default="")
     uom_width = models.CharField(max_length=20, default="")

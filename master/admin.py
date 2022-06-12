@@ -15,12 +15,16 @@ class Catalogdmin(ImportExportMixin, admin.ModelAdmin):
                     'category', 'uom', 'is_stock', 'sell_price', 'sell_disc', 
                     'purchase_price', 'purchase_disc', 'is_active', 'created_at', 'updated_at'
                 )
+    list_filter = ('is_active', 'category', 'uom', 'created_at',)
+    search_fields = ('item_code', 'barcode',  'item_name', 'description',)
 
 class Supplierdmin(ImportExportMixin, admin.ModelAdmin):
     list_display= ('supplier_code', 'supplier_name', 'email', 'phone', 'is_active')
 
 class Customerdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display= ('customer_code', 'customer_name', 'email', 'phone', 'is_active')
+    list_display= ('customer_code', 'customer_name', 'customer_tipe','email', 'phone', 'is_active')
+    list_filter = ('is_active', 'customer_tipe', 'created_at',)
+    search_fields = ('customer_code', 'customer_name',  'email', 'phone',)
 
 
 admin.site.register(Warehouse, WarehouseAdmin)

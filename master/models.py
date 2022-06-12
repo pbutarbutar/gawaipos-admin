@@ -102,6 +102,10 @@ class Customer(models.Model):
     email = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_customer')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_customer')
 
     def __str__(self):
         return self.customer_name

@@ -62,6 +62,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'gawaipos.urls'
+SUMMERNOTE_THEME = 'bs4'
 
 TEMPLATES = [
     {
