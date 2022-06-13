@@ -12,10 +12,10 @@ class CategoryAdmin(ImportExportMixin, admin.ModelAdmin):
 
 class Catalogdmin(ImportExportMixin, admin.ModelAdmin):
     list_display= ('item_code', 'barcode', 'item_name', 'description', 
-                    'category', 'uom', 'is_stock', 'sell_price', 'sell_disc', 
-                    'purchase_price', 'purchase_disc', 'is_active', 'created_at', 'updated_at'
+                    'category', 'uom_inventory', 'is_stock', 'uom_sales',  'uom_sell_price', 'sell_price', 'sell_disc', 
+                    'uom_purchase', 'uom_purchase_price', 'purchase_price', 'purchase_disc', 'is_active', 'created_at', 'updated_at'
                 )
-    list_filter = ('is_active', 'category', 'uom', 'created_at',)
+    list_filter = ('is_active', 'category', 'uom_inventory', 'created_at',)
     search_fields = ('item_code', 'barcode',  'item_name', 'description',)
 
 class Supplierdmin(ImportExportMixin, admin.ModelAdmin):
