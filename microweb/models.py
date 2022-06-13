@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from merchants.models import Merchant
 
 class Profile(models.Model):
     
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
     slug = models.CharField(max_length=100)
     keywords = models.CharField(max_length=150, default="")
     title = models.CharField(max_length=100)
@@ -28,6 +30,7 @@ class Profile(models.Model):
 
 class AboutUs(models.Model):
     
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
     slug = models.SlugField(max_length=100)
     keywords = models.CharField(max_length=150, default="")
     title = models.CharField(max_length=100)
@@ -48,6 +51,7 @@ class AboutUs(models.Model):
 
 class ProductList(models.Model):
     
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
     slug = models.CharField(max_length=100)
     product_keywords = models.CharField(max_length=150, default="")
     product_title = models.CharField(max_length=100)
@@ -69,6 +73,7 @@ class ProductList(models.Model):
 
 class ProductListImages(models.Model):
     
+    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
     slug = models.CharField(max_length=100)
     product_images_keywords = models.CharField(max_length=150, default="")
     product_images_title = models.CharField(max_length=100, default="")
