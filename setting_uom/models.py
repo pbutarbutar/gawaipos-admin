@@ -4,7 +4,7 @@ from merchants.models import Merchant
 
 class GroupUom(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_group_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_group_merchant_id')
     group_uom = models.CharField(max_length=10, unique=True, blank=False, default='')
     description = models.CharField(max_length=100, default="")
     is_active = models.BooleanField(default=True)    
@@ -19,7 +19,7 @@ class GroupUom(models.Model):
 
 class Uom(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_merchant_id')
     uom_code = models.CharField(max_length=10, unique=True, blank=False, default='')
     uom_name = models.CharField(max_length=20, default="")
     uom_length = models.CharField(max_length=20, default="")
@@ -41,8 +41,8 @@ class Uom(models.Model):
 
 class GroupUomDefinition(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_group_def_merchant_id')
-    group_id = models.ForeignKey(GroupUom, on_delete=models.CASCADE, related_name='group_id_definition')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='uom_group_def_merchant_id')
+    group = models.ForeignKey(GroupUom, on_delete=models.CASCADE, related_name='group_id_definition')
     qty_to = models.FloatField(default=0)
     uom_to = models.ForeignKey(Uom, on_delete=models.CASCADE, related_name='uom_definition_to')
     base_qty = models.FloatField(default=0)

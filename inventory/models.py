@@ -6,7 +6,7 @@ from merchants.models import Merchant
 
 class StockOnhand(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='inv_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='inv_merchant_id')
     catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, blank=False, null=False, related_name='catalog_inv')
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, blank=False, null=False, related_name='warehouse_inv')
     descriptions = models.CharField(max_length=50)

@@ -4,7 +4,7 @@ from merchants.models import Merchant
 
 class Purchase(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='purchase_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='purchase_merchant_id')
     purchase_number = models.CharField(max_length=50, unique=True)
     purchase_date = models.DateField()
     is_active = models.BooleanField(default=True)    
