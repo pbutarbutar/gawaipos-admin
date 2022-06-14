@@ -47,7 +47,7 @@ class AboutUs(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_mcrw_aboutus')
     
     def __str__(self):
-        return self.title
+        return {self.title} +"-"+ {self.merchant}
     
     class Meta:
         db_table = "microweb_about_us"
