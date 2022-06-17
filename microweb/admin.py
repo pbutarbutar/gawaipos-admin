@@ -37,7 +37,8 @@ class ProductListImagesAdmin(SummernoteModelAdmin):
 
 class ProfileAdmin(SummernoteModelAdmin):
     list_display = ('merchant', 'slug', 'title', 'name_business', 'is_active', 'created_by', 'created_at')
-
+    def get_queryset(self):
+        Profile.objects.filter(name_business=self.kwargs['name_business'])
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(AboutUs, AboutUsAdmin)

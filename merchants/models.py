@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 class Merchant(models.Model):
 
     merchant_number = models.CharField(max_length=50, unique=True)
+    merchant_name = models.CharField(max_length=100, default="")
+    merchant_email = models.CharField(max_length=100, default="")
+    merchant_phone = models.CharField(max_length=100, default="")
+    merchant_address = models.CharField(max_length=250, default="")
+    merchant_owner_name = models.CharField(max_length=100, default="")
+    merchant_owner_hp = models.CharField(max_length=100, default="")
     merchant_date = models.DateField()
     is_active = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
