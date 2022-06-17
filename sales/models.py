@@ -1,4 +1,5 @@
 from lib2to3.pgen2.token import PERCENT
+from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
 from master.models import Customer, Catalog, Warehouse
@@ -39,6 +40,7 @@ class Sales(models.Model):
 
     class Meta:
         db_table = "sales"
+        verbose_name_plural = "Saleses"
 
 
 class SalesDetails(models.Model):

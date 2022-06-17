@@ -41,8 +41,9 @@ class ProfileAdmin(SummernoteModelAdmin):
 
         # Override the get_queryset method for Admin
         qs = super(ProfileAdmin, self).get_queryset(request)
-
-        return qs.filter(merchant = 1)
+        
+        # Check Group, if group is administrator passed otherwise filter by merchant user login
+        return qs.filter(merchant = 3)
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(AboutUs, AboutUsAdmin)
