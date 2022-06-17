@@ -21,7 +21,7 @@ class Merchant(models.Model):
         return self.merchant_number
 
 
-class ApiToken(models.Model):
+class ApiToken(models.Model): 
 
     token_api_internal = models.CharField(max_length=250, unique=True)
     is_active = models.BooleanField(default=True)    
