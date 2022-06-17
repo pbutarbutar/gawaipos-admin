@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
     'microweb',
     'merchants',
     'setting_uom',
+    'employies',
 ]
 
 MIDDLEWARE = [
@@ -91,11 +97,11 @@ WSGI_APPLICATION = 'gawaipos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gawaipos',
-        'USER': 'root',
-        'PASSWORD': 'qwerty123',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'NAME': os.environ.get("DB_NAME"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': os.environ.get("DB_PORT")
     }
 }
 

@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from master.models import Customer, Catalog, Warehouse
 from merchants.models import Merchant
+from setting_uom.models import Uom
 
 # Create your models here.
 
@@ -16,10 +17,10 @@ class Sales(models.Model):
     )
 
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_merchant_id')
     trx_num = models.CharField(max_length=50, unique=True)
     trx_date = models.DateField()
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_customerid')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_customerid')
     voucher_code = models.CharField(max_length=15)
     is_credit = models.BooleanField(default=True)  
     trx_due_date = models.DateField()
@@ -42,11 +43,13 @@ class Sales(models.Model):
 
 class SalesDetails(models.Model):
     
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_item_merchant_id')
-    sales_id = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_id')
-    item_id = models.ForeignKey(Catalog, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_catalog_id')
-    warehouse_id = models.ForeignKey(Warehouse, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_warehouse_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_item_merchant_id')
+    sales = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_id')
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_catalog_id')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_detail_warehouse_id')
     cogs = models.FloatField(default=0)
+    qty = models.FloatField(default=0)
+    uom = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sales_items')
     sales_price = models.FloatField(default=0)
     disc_percent = models.FloatField(default=0)
     total = models.FloatField(default=0)  

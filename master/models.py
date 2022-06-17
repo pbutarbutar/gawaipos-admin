@@ -10,9 +10,10 @@ from merchants.models import Merchant
 
 class Warehouse(models.Model):
 
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
     warehouse_name = models.CharField(max_length=50, unique=True)
     warehouse_address = models.CharField(max_length=50)
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
     is_active = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
@@ -39,6 +40,7 @@ class Category(models.Model):
         (ANOTHER, 'Another'),
     )
 
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='category_merchant_id')
     catogory_tipe = models.CharField(max_length=50, choices=ITEMTYPE, default=PART)
     category_name = models.CharField(max_length=150, unique=True)
     description = models.CharField(max_length=250)
@@ -56,17 +58,21 @@ class Category(models.Model):
 
 class Catalog(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
     item_code = models.CharField(max_length=50, unique=True)
     barcode = models.CharField(max_length=50)
     item_name = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    uom_group_id = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
-    uom = models.ForeignKey(Uom, on_delete=models.CASCADE, related_name='uom_catalog_id')
+    uom_group = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
+    uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True , related_name='uom_inventory')
+    uom_sales = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sales')
+    uom_purchase = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase')
+    uom_sell_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sell_price')
     sell_price = models.IntegerField() 
     sell_disc = models.IntegerField()
-    purchase_price = models.IntegerField() 
+    uom_purchase_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase_price') 
+    purchase_price = models.IntegerField()
     purchase_disc = models.IntegerField()
     is_stock = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)    
@@ -81,7 +87,7 @@ class Catalog(models.Model):
 
 class Supplier(models.Model):
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='supplier_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='supplier_merchant_id')
     supplier_code = models.CharField(max_length=50, unique=True)
     supplier_name = models.CharField(max_length=150)
     address = models.CharField(max_length=250)
@@ -101,7 +107,7 @@ class Customer(models.Model):
         (CREDIT, 'Credit'),
     )
 
-    merchant_id = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='customer_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='customer_merchant_id')
     customer_tipe = models.CharField(max_length=50, choices=CUSTTYPE, default=CASH)
     customer_code = models.CharField(max_length=50, unique=True)
     customer_name = models.CharField(max_length=150)
