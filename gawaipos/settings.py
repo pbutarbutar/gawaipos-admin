@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'microweb',
     'merchants',
     'setting_uom',
+    'employies',
 ]
 
 MIDDLEWARE = [
