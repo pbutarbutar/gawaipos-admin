@@ -1,5 +1,7 @@
 from django.contrib import admin
-from merchants.models import Merchant,ApiToken,BillingMerchant
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+from merchants.models import AccountMerchant, Merchant,ApiToken,BillingMerchant
 
 
 class MerchantAdmin(admin.ModelAdmin):
@@ -8,7 +10,16 @@ class MerchantAdmin(admin.ModelAdmin):
     search_fields = ('merchant_number', 'merchant_name',  'merchant_email',)
 
 
-# Register your models here.
+class AccountInline(admin.StackedInline):
+    model = AccountMerchant
+    can_delete = False
+    verbose_name_plural = 'Accounts'
+
+class CustomizedUserAdmin(UserAdmin):
+    inlines = (AccountInline, )
+
 admin.site.register(Merchant, MerchantAdmin)
 admin.site.register(ApiToken)
 admin.site.register(BillingMerchant)
+admin.site.unregister(User)
+admin.site.register(User, CustomizedUserAdmin)
