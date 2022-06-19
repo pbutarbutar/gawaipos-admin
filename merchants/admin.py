@@ -9,6 +9,20 @@ class MerchantAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'created_at',)
     search_fields = ('merchant_number', 'merchant_name',  'merchant_email',)
 
+    def get_queryset(self, request):
+
+        # Override the get_queryset method for Admin
+        qs = super(MerchantAdmin, self).get_queryset(request)
+        
+        merchant_acc = AccountMerchant.objects.filter(user_id=request.user).first()
+        print("debug :", merchant_acc.role_user)
+
+        if merchant_acc.role_user == "GAWAIPOS": 
+            return qs
+
+        #if request.user.is_superuser:
+          #  return qs
+        return qs.filter(id = merchant_acc.merchant_id)
 
 class AccountInline(admin.StackedInline):
     model = AccountMerchant
