@@ -1,11 +1,23 @@
-FROM python:3
+FROM python:3.9-alpine
+
+RUN apk add gcc musl-dev mariadb-connector-c-dev
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /usr/src/app
+RUN mkdir /gawaipos
 
-COPY poetry.lock pyproject.toml /usr/src/app/
+WORKDIR /gawaipos
 
-RUN pip3 install poetry
+COPY . .
 
-RUN poetry install
+COPY ./requirements.txt /requirements.txt
+
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
+RUN pip install --upgrade setuptools
+
+RUN pip install -r /requirements.txt
+
+# Create a user that can run your container
+RUN adduser -D user
+USER user
