@@ -41,20 +41,6 @@ services:
       - db
     networks:
       - gw-network
-  webmicros:
-    build:
-      context: ./webmicros/webmicro/
-    ports:
-      - "8001:8000"
-      
-    volumes: 
-      - ./webmicros/webmicro:/usr/src/app
-    command: sh -c "python manage.py runserver 0.0.0.0:8000" 
-    restart: always
-    depends_on:
-      - db
-    networks:
-      - gw-network
 volumes:
   db:
     driver: local
