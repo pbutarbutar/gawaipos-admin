@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Profile, AboutUs, ProductList, ProductListImages
 from django_summernote.admin import SummernoteModelAdmin
 from django_summernote.models import Attachment
+from merchants.models import AccountMerchant, Merchant
 
 
 class AboutUsAdmin(SummernoteModelAdmin):
@@ -37,8 +38,33 @@ class ProductListImagesAdmin(SummernoteModelAdmin):
 
 class ProfileAdmin(SummernoteModelAdmin):
     list_display = ('merchant', 'slug', 'title', 'name_business', 'is_active', 'created_by', 'created_at')
-    def get_queryset(self):
-        Profile.objects.filter(name_business=self.kwargs['name_business'])
+    
+    
+    
+    def get_queryset(self, request):
+
+        # Override the get_queryset method for Admin
+        qs = super(ProfileAdmin, self).get_queryset(request)
+        
+        merchant_acc = AccountMerchant.objects.filter(user_id=request.user).first()
+        print("debug :", merchant_acc.role_user)
+
+        if merchant_acc.role_user == "GAWAIPOS": 
+            return qs
+
+        #if request.user.is_superuser:
+          #  return qs
+        return qs.filter(merchant = merchant_acc.merchant)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "merchant":
+            merchant_acc = AccountMerchant.objects.filter(user_id=request.user).first()
+            print("debug :", merchant_acc.merchant_id)
+
+            if merchant_acc.role_user != "GAWAIPOS": 
+                kwargs['queryset'] = Merchant.objects.filter(id=merchant_acc.merchant_id)
+
+        return super(ProfileAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(AboutUs, AboutUsAdmin)

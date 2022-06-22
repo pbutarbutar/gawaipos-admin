@@ -1,5 +1,5 @@
 from django.contrib import admin
-from employies.models import *
+from .models import *
 
 class StaffAdmin(admin.ModelAdmin):
     list_display= ('merchant', 'staff_code', 'staff_name', 'departement')
