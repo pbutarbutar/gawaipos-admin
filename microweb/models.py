@@ -33,6 +33,7 @@ class Profile(models.Model):
 
     class Meta:
         db_table = "microweb_profile"
+        verbose_name_plural = "Profiles"
 
 class AboutUs(models.Model):
     
@@ -53,6 +54,8 @@ class AboutUs(models.Model):
     
     class Meta:
         db_table = "microweb_about_us"
+        verbose_name_plural = "About Us"
+        
 
 
 class ProductList(models.Model):
@@ -75,6 +78,7 @@ class ProductList(models.Model):
 
     class Meta:
         db_table = "microweb_product_categories"
+        verbose_name_plural = "Product Categories"
 
 class ProductListImages(models.Model):
     
@@ -96,3 +100,4 @@ class ProductListImages(models.Model):
 
     class Meta:
         db_table = "microweb_product_details"
+        verbose_name_plural = "Product Details"
