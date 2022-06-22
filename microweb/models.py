@@ -56,11 +56,28 @@ class AboutUs(models.Model):
 class ProductList(models.Model):
     
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
-    slug = models.CharField(max_length=100)
-    product_keywords = models.CharField(max_length=150, default="")
+    slug = models.CharField(
+        max_length=100, 
+        verbose_name = "Slug",
+        blank=True,
+    )
+    product_keywords = models.CharField(
+        max_length=150, 
+        default="",
+        verbose_name = "Keywords",
+        blank=True,
+    )
     product_title = models.CharField(max_length=100)
-    product_description= models.CharField(max_length=250)
-    product_view_body= models.TextField()
+    product_description= models.CharField(max_length=250,
+        default="",
+        verbose_name = "Product Description",
+        blank=False,
+    )
+    product_view_body= models.TextField(
+        default="",
+        verbose_name = "Body Description",
+        blank=True,
+    )
     thumb_product = models.ImageField(upload_to='thumb_product')
     is_draft = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
