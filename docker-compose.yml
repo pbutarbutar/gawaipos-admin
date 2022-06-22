@@ -30,6 +30,7 @@ services:
     volumes: 
       - .:/gawaipos
     command: sh -c "python manage.py runserver 0.0.0.0:8000" 
+    restart: always
     environment:
       - DB_HOST=db
       - DB_PORT=3306
