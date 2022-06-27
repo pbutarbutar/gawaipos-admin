@@ -92,12 +92,12 @@ class ItemPharmacyClassification(models.Model):
 
 
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_pharmacy_classification_merchant_id')
-    merk = models.CharField(max_length=50)
-    kemasan = models.CharField(max_length=50)
-    jenis = models.CharField(max_length=150)
+    kemasan = models.CharField(max_length=50, default="")
+    jenis = models.CharField(max_length=150, default="")
     golongan = models.CharField(max_length=50, choices=GOLONGAN, default=OBAT_BEBAS)
-    produsen = models.CharField(max_length=50)
-    remarks = models.CharField(max_length=250)
+    komposisi = models.CharField(max_length=100, default="")
+    produsen = models.CharField(max_length=50, default="")
+    remarks = models.CharField(max_length=250, default="")
 
     def __str__(self):
         return self.warehouse_name
