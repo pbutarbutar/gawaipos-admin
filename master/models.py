@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 from setting_uom.models import Uom, GroupUom
 from merchants.models import Merchant
 
-
-# Create your models here.
-
 class Warehouse(models.Model):
 
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
@@ -22,6 +19,10 @@ class Warehouse(models.Model):
 
     def __str__(self):
         return self.warehouse_name
+
+    class Meta:
+        db_table = "warehouses"
+        verbose_name_plural = "Warehouse"
 
 class Category(models.Model):
     PART = 'Part'
@@ -56,6 +57,65 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
+class ItemOtoClassification(models.Model):
+
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_auto_classification_merchant_id')
+    merk = models.CharField(max_length=50)
+    model = models.CharField(max_length=50)
+    pettern = models.CharField(max_length=150)
+    ring = models.CharField(max_length=20)
+    size = models.CharField(max_length=20)
+    remarks = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.warehouse_name
+
+class ItemPharmacyClassification(models.Model):
+
+    OBAT_BEBAS = 'Obat Bebas'
+    OBAT_KERAS = 'Obat Keras'
+    OBAT_TERBATAS = 'Obat Terbatas'
+    OBAT_OWA = 'Obat Wajib Apotek (OWA)'
+    OBAT_NARKOTIKA = 'Obat Golongan Narkotika'
+    OBAT_PSIKOTROPIKA = 'Obat Psikotropika'
+    OBAT_HERBAL = 'Obat Herbal'
+
+    GOLONGAN = (
+        (OBAT_BEBAS, 'OBAT BEBAS'),
+        (OBAT_KERAS, 'Obat Keras'),
+        (OBAT_TERBATAS, 'Consumable'),
+        (OBAT_OWA, 'Obat Wajib Apotek (OWA)'),
+        (OBAT_NARKOTIKA, 'Obat Golongan Narkotika'),
+        (OBAT_PSIKOTROPIKA, 'Obat Psikotropika'),
+        (OBAT_HERBAL, 'Obat Herbal'),
+    )
+
+
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_pharmacy_classification_merchant_id')
+    kemasan = models.CharField(max_length=50, default="")
+    jenis = models.CharField(max_length=150, default="")
+    golongan = models.CharField(max_length=50, choices=GOLONGAN, default=OBAT_BEBAS)
+    komposisi = models.CharField(max_length=100, default="")
+    produsen = models.CharField(max_length=50, default="")
+    remarks = models.CharField(max_length=250, default="")
+
+    def __str__(self):
+        return self.warehouse_name
+
+class ItemGeneralClassification(models.Model):
+
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_general_classification_merchant_id')
+    merk = models.CharField(max_length=50)
+    model = models.CharField(max_length=50)
+    pettern = models.CharField(max_length=150)
+    kemasan = models.CharField(max_length=20)
+    size = models.CharField(max_length=20)
+    remarks = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.warehouse_name
+
+
 class Catalog(models.Model):
 
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
@@ -75,6 +135,24 @@ class Catalog(models.Model):
     purchase_price = models.IntegerField()
     purchase_disc = models.IntegerField()
     is_stock = models.BooleanField(default=True)
+    stock_minimal = models.IntegerField(default=0) 
+    stock_maximal = models.IntegerField(default=0) 
+    stock_kritis = models.IntegerField(default=0) 
+    general_classification = models.OneToOneField(
+        ItemGeneralClassification, 
+        null=True,
+        on_delete=models.CASCADE
+    )
+    oto_classification = models.OneToOneField(
+        ItemOtoClassification, 
+        null=True,
+        on_delete=models.CASCADE
+    )
+    pharmacy_classification = models.OneToOneField(
+        ItemPharmacyClassification, 
+        null=True,
+        on_delete=models.CASCADE
+    )
     is_active = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
@@ -83,6 +161,10 @@ class Catalog(models.Model):
 
     def __str__(self):
         return self.item_name
+
+    class Meta:
+        db_table = "master_item"
+        verbose_name_plural = "Master Item"
 
 
 class Supplier(models.Model):
@@ -97,6 +179,10 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.supplier_name
+
+    class Meta:
+        db_table = "suppliers"
+        verbose_name_plural = "Suppliers"
 
 class Customer(models.Model):
     CASH = 'Cash'
@@ -122,4 +208,8 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.customer_name
+
+    class Meta:
+        db_table = "customers"
+        verbose_name_plural = "Customers"
 

@@ -19,7 +19,7 @@ class VehicleType(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_VehicleType_fk')
  
     class Meta:
-        verbose_name_plural = "A. Tipes"
+        verbose_name_plural = "Tipes"
         db_table = "vehicle_type"
  
     def __str__(self):
@@ -44,7 +44,7 @@ class VehicleOwner(models.Model):
         return self.owner_name
 
     class Meta:
-        verbose_name_plural = "B. Owners"
+        verbose_name_plural = "Owners"
         db_table = "vehicle_owner"
 
 
@@ -67,5 +67,5 @@ class Vehicle(models.Model):
             return f"{self.vehicle_policy_number} {self.vehicle_owner}"
 
     class Meta:
-        verbose_name_plural = "C. Vehicles"
+        verbose_name_plural = "Vehicles"
         db_table = "vehicle"

@@ -8,8 +8,8 @@ from merchants.models import AccountMerchant, Merchant
 
 class AboutUsAdmin(SummernoteModelAdmin):
 
-    list_display = ('merchant', 'slug', 'title', 'body', 'description', 'is_draft', 'created_by', 'created_at')
-    list_filter = ('is_draft', 'created_at', 'merchant_id')
+    llist_display = ('merchant', 'slug', 'title', 'body', 'description', 'is_draft', 'created_by', 'created_at')
+    list_filter = ('is_draft', 'created_at', 'merchant')
     search_fields = ('title', )
     fieldset = (
         (None, {
@@ -25,20 +25,22 @@ class AboutUsAdmin(SummernoteModelAdmin):
 class ProductListAdmin(SummernoteModelAdmin):
 
     list_display = ('merchant', 'slug', 'product_title', 'product_description', 'product_view_body', 'is_draft', 'created_by', 'created_at')
-    list_filter = ('is_draft', 'created_at', 'merchant_id')
+    list_filter = ('is_draft', 'created_at', 'merchant')
     search_fields = ('product_title', )
     summerenote_fields =('product_view_body',)
 
 class ProductListImagesAdmin(SummernoteModelAdmin):
 
-    list_display = ('merchant', 'product_list_id','slug', 'product_images_title', 'product_images_body', 'product_images',  'is_draft', 'created_by', 'created_at')
+    list_display = ('merchant', 'product_category','slug', 'product_images_title', 'product_images_body', 'product_images',  'is_draft', 'created_by', 'created_at')
     list_filter = ('is_draft', 'created_at', 'merchant_id')
     search_fields = ('product_title', )
     summerenote_fields =('product_images_body',)
 
 class ProfileAdmin(SummernoteModelAdmin):
     list_display = ('merchant', 'slug', 'title', 'name_business', 'is_active', 'created_by', 'created_at')
-    
+    list_filter = ('is_active', 'created_at', 'merchant')
+    search_fields = ('title', 'slug', 'name_business')
+    summerenote_fields =('home_description',)
     
     
     def get_queryset(self, request):

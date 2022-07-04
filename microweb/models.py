@@ -10,10 +10,12 @@ class Profile(models.Model):
     title = models.CharField(max_length=100)
     name_business = models.CharField(max_length=50)
     address_business = models.CharField(max_length=150)
+    google_map_address = models.CharField(max_length=600, default='')
     phone = models.CharField(max_length=15)
     wa_number = models.CharField(max_length=15)
     email = models.CharField(max_length=150)
     logo = models.ImageField(upload_to='logo')
+    home_description = models.TextField(default='')
     slogan = models.CharField(max_length=150)
     facebook_link = models.CharField(max_length=150, default="")
     twitter_link = models.CharField(max_length=150, default="")
@@ -31,6 +33,7 @@ class Profile(models.Model):
 
     class Meta:
         db_table = "microweb_profile"
+        verbose_name_plural = "Profiles"
 
 class AboutUs(models.Model):
     
@@ -51,33 +54,18 @@ class AboutUs(models.Model):
     
     class Meta:
         db_table = "microweb_about_us"
+        verbose_name_plural = "About Us"
+        
 
 
 class ProductList(models.Model):
     
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True)
-    slug = models.CharField(
-        max_length=100, 
-        verbose_name = "Slug",
-        blank=True,
-    )
-    product_keywords = models.CharField(
-        max_length=150, 
-        default="",
-        verbose_name = "Keywords",
-        blank=True,
-    )
+    slug = models.CharField(max_length=100)
+    product_keywords = models.CharField(max_length=150, default="")
     product_title = models.CharField(max_length=100)
-    product_description= models.CharField(max_length=250,
-        default="",
-        verbose_name = "Product Description",
-        blank=False,
-    )
-    product_view_body= models.TextField(
-        default="",
-        verbose_name = "Body Description",
-        blank=True,
-    )
+    product_description= models.CharField(max_length=250)
+    product_view_body= models.TextField()
     thumb_product = models.ImageField(upload_to='thumb_product')
     is_draft = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
@@ -89,7 +77,8 @@ class ProductList(models.Model):
         return self.product_title
 
     class Meta:
-        db_table = "microweb_product_list"
+        db_table = "microweb_product_categories"
+        verbose_name_plural = "Product Categories"
 
 class ProductListImages(models.Model):
     
@@ -98,7 +87,7 @@ class ProductListImages(models.Model):
     product_images_keywords = models.CharField(max_length=150, default="")
     product_images_title = models.CharField(max_length=100, default="")
     product_images_body= models.TextField()
-    product_list = models.ForeignKey(ProductList, on_delete=models.CASCADE, related_name='product_list_images_id')
+    product_category = models.ForeignKey(ProductList, on_delete=models.CASCADE, related_name='product_list_images_id')
     product_images = models.ImageField(upload_to='product_images')
     is_draft = models.BooleanField(default=True)    
     created_at = models.DateTimeField(auto_now=False)
@@ -110,4 +99,5 @@ class ProductListImages(models.Model):
         return self.product_images_title
 
     class Meta:
-        db_table = "microweb_product_list_images"
+        db_table = "microweb_product_details"
+        verbose_name_plural = "Product Details"
