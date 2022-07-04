@@ -39,6 +39,7 @@ class ProductListImagesAdmin(SummernoteModelAdmin):
 class ProfileAdmin(SummernoteModelAdmin):
     list_display = ('merchant', 'slug', 'title', 'name_business', 'is_active', 'created_by', 'created_at')
     list_filter = ('is_active', 'created_at', 'merchant')
+    search_fields = ('title', 'slug', 'name_business')
     summerenote_fields =('home_description',)
     
     

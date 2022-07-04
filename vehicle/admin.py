@@ -16,6 +16,21 @@ class VehicleOwnerAdmin(admin.ModelAdmin):
     list_filter = ('merchant', 'is_active', 'created_at',)
     search_fields = ('merchant', 'owner_name', 'owner_email', 'id_number', 'address', )
 
+def get_app_list(self, request):
+    app_dict = self._build_app_dict(request)
+    app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+
+    for app in app_list:
+        if app['app_label'] == 'auth':
+            ordering = {
+                'Tipes': 1,
+                'Owners': 2,
+                'Vehicles': 3,
+            }
+            
+    return app_list
+
+admin.AdminSite.get_app_list = get_app_list
 
 admin.site.register(VehicleType, VehicleTypeAdmin)
 admin.site.register(Vehicle, VehicleAdmin)

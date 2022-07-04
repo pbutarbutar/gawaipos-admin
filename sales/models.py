@@ -40,7 +40,7 @@ class Sales(models.Model):
 
     class Meta:
         db_table = "sales"
-        verbose_name_plural = "Saleses"
+        verbose_name_plural = "Sales"
 
 
 class SalesDetails(models.Model):
@@ -65,3 +65,24 @@ class SalesDetails(models.Model):
 
     class Meta:
         db_table = "sales_details"
+
+
+class SalesInvoice(models.Model):
+
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='sales_invoice_merchant_id')
+    inv_num = models.CharField(max_length=50, unique=True)
+    inv_date = models.DateField()
+    inv_due_date = models.DateField()
+    sales = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_invoice_id')
+    is_active = models.BooleanField(default=True)    
+    created_at = models.DateTimeField(auto_now=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_inv_createdby')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='sales_inv_updatedby')
+
+    def __str__(self):
+        return self.inv_num
+
+    class Meta:
+        db_table = "sales_invoice"
+        verbose_name_plural = "Invoice"

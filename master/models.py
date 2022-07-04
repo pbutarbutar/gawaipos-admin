@@ -22,7 +22,7 @@ class Warehouse(models.Model):
 
     class Meta:
         db_table = "warehouses"
-        verbose_name_plural = "Warehouses"
+        verbose_name_plural = "Warehouse"
 
 class Category(models.Model):
     PART = 'Part'
