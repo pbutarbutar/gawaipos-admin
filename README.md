@@ -8,20 +8,9 @@ This is used for our internal staff. This connects to all of our other services 
 
 `$ brew install python3`
 
-### Poetry
-
-`$ sudo pip3 install poetry`
-
-## Project setup (for the first time)
-
-`$ poetry install`
-
-`$ poetry run python manage.py migrate`
-
-`$ poetry run python manage.py createsuperuser # this will lets you login to the admin section`
-
-## Run the project
+`$ pip install -r /path/to/requirements.txt`
 
 ``` sh
-$ poetry shell
+$ python manage.py migrate
+$ python manage.py createsuperuser # this will lets you login to the admin section`
 $ python manage.py runserver
