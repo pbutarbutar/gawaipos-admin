@@ -79,12 +79,20 @@ class ProductListAdmin(SummernoteModelAdmin):
 
         return super(ProductListAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def get_changeform_initial_data(self, request):
+        merchant_acc = AccountMerchant.objects.filter(user_id=request.user).first()
+        return {'merchant': merchant_acc.merchant_id}
+
 class ProductListImagesAdmin(SummernoteModelAdmin):
 
     list_display = ('merchant', 'product_category','slug', 'product_images_title', 'product_images_body', 'product_images',  'is_draft', 'created_by', 'created_at')
     list_filter = ('is_draft', 'created_at', 'merchant_id')
     search_fields = ('product_title', )
     summerenote_fields =('product_images_body',)
+
+    def get_changeform_initial_data(self, request):
+        merchant_acc = AccountMerchant.objects.filter(user_id=request.user).first()
+        return {'merchant': merchant_acc.merchant_id}
 
     def get_queryset(self, request):
 
@@ -110,6 +118,7 @@ class ProductListImagesAdmin(SummernoteModelAdmin):
                 kwargs['queryset'] = Merchant.objects.filter(id=merchant_acc.merchant_id)
 
         return super(ProductListImagesAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 class ProfileAdmin(SummernoteModelAdmin):
     list_display = ('merchant', 'slug', 'title', 'name_business', 'is_active', 'created_by', 'created_at')
