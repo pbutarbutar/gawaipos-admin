@@ -2,3 +2,20 @@
 *.DS_Store
 **/__pycache__
 **/.DS_Store
+
+# Ignore user editor setting
+.ropeproject
+.vscode
+.python-version
+.DS_Store
+.direnv
+
+db.sqlite3
+
+# Ignore __pycache__
+__pycache__
+
+# Environments
+.env
+
+static/
