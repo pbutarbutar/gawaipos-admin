@@ -1,7 +1,10 @@
+import enum
 from tabnanny import verbose
 from turtle import title
 from django.db import models
 from django.contrib.auth.models import User
+
+from master.choices import ITEM_CLASSIFICATION
 from setting_uom.models import Uom, GroupUom
 from merchants.models import Merchant
 
@@ -11,7 +14,7 @@ class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=50, unique=True)
     warehouse_address = models.CharField(max_length=50)
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_wh')
@@ -45,7 +48,7 @@ class Category(models.Model):
     catogory_tipe = models.CharField(max_length=50, choices=ITEMTYPE, default=PART)
     category_name = models.CharField(max_length=150, unique=True)
     description = models.CharField(max_length=250)
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_ctg')
@@ -116,6 +119,12 @@ class ItemGeneralClassification(models.Model):
         return self.warehouse_name
 
 
+class ClassificationEnum(enum.Enum):
+    otomotif = 'otomotif'
+    pharmacy = 'pharmacy'
+    general = 'general'
+
+
 class Catalog(models.Model):
 
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
@@ -123,15 +132,16 @@ class Catalog(models.Model):
     barcode = models.CharField(max_length=50)
     item_name = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    classification = models.CharField(max_length=30, blank=True, default='',
+                                      choices=ITEM_CLASSIFICATION)
     uom_group = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
     uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True , related_name='uom_inventory')
     uom_sales = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sales')
     uom_purchase = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase')
     uom_sell_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sell_price')
-    sell_price = models.IntegerField() 
+    sell_price = models.IntegerField()
     sell_disc = models.IntegerField()
-    uom_purchase_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase_price') 
+    uom_purchase_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase_price')
     purchase_price = models.IntegerField()
     purchase_disc = models.IntegerField()
     is_stock = models.BooleanField(default=True)
@@ -139,24 +149,24 @@ class Catalog(models.Model):
     stock_maximal = models.IntegerField(default=0, null=True, blank=True)
     stock_kritis = models.IntegerField(default=0, null=True, blank=True)
     general_classification = models.OneToOneField(
-        ItemGeneralClassification, 
+        ItemGeneralClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
     oto_classification = models.OneToOneField(
-        ItemOtoClassification, 
+        ItemOtoClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
     pharmacy_classification = models.OneToOneField(
-        ItemPharmacyClassification, 
+        ItemPharmacyClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_ctlg')
