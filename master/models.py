@@ -135,22 +135,25 @@ class Catalog(models.Model):
     purchase_price = models.IntegerField()
     purchase_disc = models.IntegerField()
     is_stock = models.BooleanField(default=True)
-    stock_minimal = models.IntegerField(default=0) 
-    stock_maximal = models.IntegerField(default=0) 
-    stock_kritis = models.IntegerField(default=0) 
+    stock_minimal = models.IntegerField(default=0, null=True, blank=True)
+    stock_maximal = models.IntegerField(default=0, null=True, blank=True)
+    stock_kritis = models.IntegerField(default=0, null=True, blank=True)
     general_classification = models.OneToOneField(
         ItemGeneralClassification, 
         null=True,
+        blank=True,
         on_delete=models.CASCADE
     )
     oto_classification = models.OneToOneField(
         ItemOtoClassification, 
         null=True,
+        blank=True,
         on_delete=models.CASCADE
     )
     pharmacy_classification = models.OneToOneField(
         ItemPharmacyClassification, 
         null=True,
+        blank=True,
         on_delete=models.CASCADE
     )
     is_active = models.BooleanField(default=True)    
