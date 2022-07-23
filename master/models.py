@@ -1,15 +1,14 @@
 import enum
-from tabnanny import verbose
-from turtle import title
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from master.choices import ITEM_CLASSIFICATION
-from setting_uom.models import Uom, GroupUom
+from setting_uom.models import Uom, GroupUom, GroupUomDefinition
 from merchants.models import Merchant
 
-class Warehouse(models.Model):
 
+class Warehouse(models.Model):
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
     warehouse_name = models.CharField(max_length=50, unique=True)
     warehouse_address = models.CharField(max_length=50)
@@ -26,6 +25,7 @@ class Warehouse(models.Model):
     class Meta:
         db_table = "warehouses"
         verbose_name_plural = "Warehouse"
+
 
 class Category(models.Model):
     PART = 'Part'
@@ -60,9 +60,10 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-class ItemOtoClassification(models.Model):
 
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_auto_classification_merchant_id')
+class ItemOtoClassification(models.Model):
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_auto_classification_merchant_id')
     merk = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     pettern = models.CharField(max_length=150)
@@ -73,8 +74,8 @@ class ItemOtoClassification(models.Model):
     def __str__(self):
         return self.warehouse_name
 
-class ItemPharmacyClassification(models.Model):
 
+class ItemPharmacyClassification(models.Model):
     OBAT_BEBAS = 'Obat Bebas'
     OBAT_KERAS = 'Obat Keras'
     OBAT_TERBATAS = 'Obat Terbatas'
@@ -93,8 +94,8 @@ class ItemPharmacyClassification(models.Model):
         (OBAT_HERBAL, 'Obat Herbal'),
     )
 
-
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_pharmacy_classification_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_pharmacy_classification_merchant_id')
     kemasan = models.CharField(max_length=50, default="")
     jenis = models.CharField(max_length=150, default="")
     golongan = models.CharField(max_length=50, choices=GOLONGAN, default=OBAT_BEBAS)
@@ -105,9 +106,10 @@ class ItemPharmacyClassification(models.Model):
     def __str__(self):
         return self.warehouse_name
 
-class ItemGeneralClassification(models.Model):
 
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_general_classification_merchant_id')
+class ItemGeneralClassification(models.Model):
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_general_classification_merchant_id')
     merk = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     pettern = models.CharField(max_length=150)
@@ -119,14 +121,7 @@ class ItemGeneralClassification(models.Model):
         return self.warehouse_name
 
 
-class ClassificationEnum(enum.Enum):
-    otomotif = 'otomotif'
-    pharmacy = 'pharmacy'
-    general = 'general'
-
-
 class Catalog(models.Model):
-
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
     item_code = models.CharField(max_length=50, unique=True)
     barcode = models.CharField(max_length=50)
@@ -135,7 +130,7 @@ class Catalog(models.Model):
     classification = models.CharField(max_length=30, blank=True, default='',
                                       choices=ITEM_CLASSIFICATION)
     uom_group = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
-    uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True , related_name='uom_inventory')
+    uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_inventory')
     uom_sales = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sales')
     uom_purchase = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase')
     uom_sell_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sell_price')
@@ -181,7 +176,6 @@ class Catalog(models.Model):
 
 
 class Supplier(models.Model):
-
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='supplier_merchant_id')
     supplier_code = models.CharField(max_length=50, unique=True)
     supplier_name = models.CharField(max_length=150)
@@ -196,6 +190,7 @@ class Supplier(models.Model):
     class Meta:
         db_table = "suppliers"
         verbose_name_plural = "Suppliers"
+
 
 class Customer(models.Model):
     CASH = 'Cash'
@@ -216,8 +211,10 @@ class Customer(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_customer')
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_customer')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                   related_name='create_customer')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                   related_name='update_customer')
 
     def __str__(self):
         return self.customer_name
@@ -225,4 +222,3 @@ class Customer(models.Model):
     class Meta:
         db_table = "customers"
         verbose_name_plural = "Customers"
-

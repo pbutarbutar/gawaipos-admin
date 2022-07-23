@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportMixin
-from master.models import Warehouse, Catalog, Category, Supplier, Customer
+from master.models import Warehouse, Catalog, Supplier, Customer
 
 
 class WarehouseAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -9,7 +9,10 @@ class WarehouseAdmin(ImportExportMixin, admin.ModelAdmin):
         'updated_by',)
 
 
-class Catalogdmin(ImportExportMixin, admin.ModelAdmin):
+class CatalogAdmin(ImportExportMixin, admin.ModelAdmin):
+
+    change_form_template = 'master/catalog_form.html'
+
     list_display = ('merchant', 'item_code', 'barcode', 'item_name', 'description',
                     'classification', 'uom_inventory', 'is_stock', 'uom_group', 'uom_sales', 'uom_sell_price',
                     'sell_price', 'sell_disc',
@@ -17,14 +20,15 @@ class Catalogdmin(ImportExportMixin, admin.ModelAdmin):
                     'updated_at'
                     )
     list_filter = ('is_active', 'classification', 'uom_inventory', 'created_at',)
+
     search_fields = ('item_code', 'barcode', 'item_name', 'description',)
 
 
-class Supplierdmin(ImportExportMixin, admin.ModelAdmin):
+class SupplierAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('merchant', 'supplier_code', 'supplier_name', 'email', 'phone', 'is_active')
 
 
-class Customerdmin(ImportExportMixin, admin.ModelAdmin):
+class CustomerAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('merchant', 'customer_code', 'customer_name', 'customer_tipe', 'email', 'phone', 'is_active')
     list_filter = ('is_active', 'customer_tipe', 'created_at',)
     search_fields = ('customer_code', 'customer_name', 'email', 'phone',)
@@ -49,6 +53,6 @@ def get_app_list(self, request):
 admin.AdminSite.get_app_list = get_app_list
 
 admin.site.register(Warehouse, WarehouseAdmin)
-admin.site.register(Catalog, Catalogdmin)
-admin.site.register(Supplier, Supplierdmin)
-admin.site.register(Customer, Customerdmin)
+admin.site.register(Catalog, CatalogAdmin)
+admin.site.register(Supplier, SupplierAdmin)
+admin.site.register(Customer, CustomerAdmin)

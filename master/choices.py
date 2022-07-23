@@ -2,7 +2,7 @@
 from model_utils import Choices
 
 ITEM_CLASSIFICATION = Choices(
-    ('otomotif', 'otomotif'),
+    ('automotive', 'automotive'),
     ('pharmacy', 'pharmacy'),
     ('general', 'general')
 )

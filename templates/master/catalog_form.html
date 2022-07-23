@@ -1,0 +1,30 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $("select#id_uom_group").change(function (e) {
+        e.preventDefault();
+        const group_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'get_uom' %}",
+            data: {"group_id": group_id},
+            success: function (data) {
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (data) {
+                    html_data += `<option value="${data.id}">${data.uom_name}</option>`
+                });
+                $("select#id_uom_inventory").html(html_data);
+                $("select#id_uom_sales").html(html_data);
+                $("select#id_uom_purchase").html(html_data);
+                $("select#id_uom_sell_price").html(html_data);
+                $("select#id_uom_purchase_price").html(html_data);
+            }
+        });
+    });
+</script>
+{% endblock %}
