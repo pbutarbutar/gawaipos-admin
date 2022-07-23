@@ -1,17 +1,19 @@
-from tabnanny import verbose
-from turtle import title
+import enum
 from django.db import models
 from django.contrib.auth.models import User
-from setting_uom.models import Uom, GroupUom
+from django.db.models import Q
+
+from master.choices import ITEM_CLASSIFICATION
+from setting_uom.models import Uom, GroupUom, GroupUomDefinition
 from merchants.models import Merchant
 
-class Warehouse(models.Model):
 
+class Warehouse(models.Model):
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
     warehouse_name = models.CharField(max_length=50, unique=True)
     warehouse_address = models.CharField(max_length=50)
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='wh_merchant_id')
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_wh')
@@ -23,6 +25,7 @@ class Warehouse(models.Model):
     class Meta:
         db_table = "warehouses"
         verbose_name_plural = "Warehouse"
+
 
 class Category(models.Model):
     PART = 'Part'
@@ -45,7 +48,7 @@ class Category(models.Model):
     catogory_tipe = models.CharField(max_length=50, choices=ITEMTYPE, default=PART)
     category_name = models.CharField(max_length=150, unique=True)
     description = models.CharField(max_length=250)
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_ctg')
@@ -57,9 +60,10 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-class ItemOtoClassification(models.Model):
 
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_auto_classification_merchant_id')
+class ItemOtoClassification(models.Model):
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_auto_classification_merchant_id')
     merk = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     pettern = models.CharField(max_length=150)
@@ -70,8 +74,8 @@ class ItemOtoClassification(models.Model):
     def __str__(self):
         return self.warehouse_name
 
-class ItemPharmacyClassification(models.Model):
 
+class ItemPharmacyClassification(models.Model):
     OBAT_BEBAS = 'Obat Bebas'
     OBAT_KERAS = 'Obat Keras'
     OBAT_TERBATAS = 'Obat Terbatas'
@@ -90,8 +94,8 @@ class ItemPharmacyClassification(models.Model):
         (OBAT_HERBAL, 'Obat Herbal'),
     )
 
-
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_pharmacy_classification_merchant_id')
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_pharmacy_classification_merchant_id')
     kemasan = models.CharField(max_length=50, default="")
     jenis = models.CharField(max_length=150, default="")
     golongan = models.CharField(max_length=50, choices=GOLONGAN, default=OBAT_BEBAS)
@@ -102,9 +106,10 @@ class ItemPharmacyClassification(models.Model):
     def __str__(self):
         return self.warehouse_name
 
-class ItemGeneralClassification(models.Model):
 
-    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='item_general_classification_merchant_id')
+class ItemGeneralClassification(models.Model):
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True,
+                                 related_name='item_general_classification_merchant_id')
     merk = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     pettern = models.CharField(max_length=150)
@@ -117,21 +122,21 @@ class ItemGeneralClassification(models.Model):
 
 
 class Catalog(models.Model):
-
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='catalog_merchant_id')
     item_code = models.CharField(max_length=50, unique=True)
     barcode = models.CharField(max_length=50)
     item_name = models.CharField(max_length=150)
     description = models.CharField(max_length=250)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    classification = models.CharField(max_length=30, blank=True, default='',
+                                      choices=ITEM_CLASSIFICATION)
     uom_group = models.ForeignKey(GroupUom, on_delete=models.CASCADE, null=True, related_name='uom_group_catalog_id')
-    uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True , related_name='uom_inventory')
+    uom_inventory = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_inventory')
     uom_sales = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sales')
     uom_purchase = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase')
     uom_sell_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_sell_price')
-    sell_price = models.IntegerField() 
+    sell_price = models.IntegerField()
     sell_disc = models.IntegerField()
-    uom_purchase_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase_price') 
+    uom_purchase_price = models.ForeignKey(Uom, on_delete=models.CASCADE, null=True, related_name='uom_purchase_price')
     purchase_price = models.IntegerField()
     purchase_disc = models.IntegerField()
     is_stock = models.BooleanField(default=True)
@@ -139,24 +144,24 @@ class Catalog(models.Model):
     stock_maximal = models.IntegerField(default=0, null=True, blank=True)
     stock_kritis = models.IntegerField(default=0, null=True, blank=True)
     general_classification = models.OneToOneField(
-        ItemGeneralClassification, 
+        ItemGeneralClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
     oto_classification = models.OneToOneField(
-        ItemOtoClassification, 
+        ItemOtoClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
     pharmacy_classification = models.OneToOneField(
-        ItemPharmacyClassification, 
+        ItemPharmacyClassification,
         null=True,
         blank=True,
         on_delete=models.CASCADE
     )
-    is_active = models.BooleanField(default=True)    
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_ctlg')
@@ -171,7 +176,6 @@ class Catalog(models.Model):
 
 
 class Supplier(models.Model):
-
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, null=True, related_name='supplier_merchant_id')
     supplier_code = models.CharField(max_length=50, unique=True)
     supplier_name = models.CharField(max_length=150)
@@ -186,6 +190,7 @@ class Supplier(models.Model):
     class Meta:
         db_table = "suppliers"
         verbose_name_plural = "Suppliers"
+
 
 class Customer(models.Model):
     CASH = 'Cash'
@@ -206,8 +211,10 @@ class Customer(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='create_customer')
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='update_customer')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                   related_name='create_customer')
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                   related_name='update_customer')
 
     def __str__(self):
         return self.customer_name
@@ -215,4 +222,3 @@ class Customer(models.Model):
     class Meta:
         db_table = "customers"
         verbose_name_plural = "Customers"
-
